@@ -1,5 +1,6 @@
 
 from . import checkers
+from . augmentations.main import apply_augmentations
 
 
 def register(linter):
@@ -8,3 +9,5 @@ def register(linter):
     linter.register_checker(checkers.no_modules.NoModuleChecker(linter))
     linter.register_checker(checkers.format.FormatChecker(linter))
 
+    # register any checking fiddlers
+    apply_augmentations(linter)
