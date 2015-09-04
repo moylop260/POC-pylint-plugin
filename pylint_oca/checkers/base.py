@@ -24,9 +24,16 @@ OCA_MSGS = {
 
 class CustomBasicChecker(BasicChecker):
     __implements__ = IAstroidChecker
-    msgs = OCA_MSGS
-    options = ()
-    reports = ()
+
+    def __init__(self, *args, **kwargs):
+        super(CustomBasicChecker, self).__init__(*args, **kwargs)
+        self.msgs = OCA_MSGS
+        self.options = ()
+        self.reports = ()
+
+    def open(self):
+        # Enable stats for other check different to enabled here
+        self.stats = self.linter.add_stats(pointless_statement=0)
 
     @utils.check_messages('oca-pointless-statement')
     def visit_discard(self, node):
