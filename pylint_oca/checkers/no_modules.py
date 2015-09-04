@@ -55,6 +55,7 @@ for more info visit pylint doc
 
 import ast
 import os
+import re
 
 from pylint.checkers import BaseChecker, utils
 from pylint.interfaces import IAstroidChecker
@@ -95,6 +96,14 @@ OCA_MSGS = {
         'manifest-deprecated-key',
         settings.DESC_DFLT
     ),
+    'C%d04' % settings.BASE_NOMODULE_ID: (
+        'Use `CamelCase` "%s" in class name "%s". '
+        'You can use oca-autopep8 of https://github.com/OCA/maintainer-tools'
+        ' to auto fix it.',
+        'class-camelcase',
+        settings.DESC_DFLT
+    ),
+
 
 }
 
@@ -188,6 +197,16 @@ class NoModuleChecker(BaseChecker):
                         and import_as_name != 'UserError':
                     self.add_message(
                         'openerp-exception-warning', node=node)
+
+    @utils.check_messages('class-camelcase')
+    def visit_class(self, node):
+        camelized = self.camelize(node.name)
+        if camelized != node.name:
+            self.add_message('class-camelcase', node=node,
+                             args=(camelized, node.name))
+
+    def camelize(self, string):
+        return re.sub(r"(?:^|_)(.)", lambda m: m.group(1).upper(), string)
 
     def get_decorators_names(self, decorators):
         nodes = []
