@@ -137,7 +137,7 @@ class NoModuleChecker(BaseChecker):
     def visit_dict(self, node):
         if os.path.basename(self.linter.current_file) in \
                 settings.MANIFEST_FILES:
-            manifest_dict = ast.listeral_eval(node.ast_string())
+            manifest_dict = ast.literal_eval(node.as_string())
 
             # Check author required
             authors = manifest_dict.get('author', '').split(',')

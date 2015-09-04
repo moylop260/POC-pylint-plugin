@@ -32,8 +32,12 @@ class CustomBasicChecker(BasicChecker):
         self.reports = ()
 
     def open(self):
+        super(CustomBasicChecker, self).open()
         # Enable stats for other check different to enabled here
-        self.stats = self.linter.add_stats(pointless_statement=0)
+        kwargs = {
+            'pointless_statement': 0,
+        }
+        self.stats = self.linter.add_stats(**kwargs)
 
     @utils.check_messages('oca-pointless-statement')
     def visit_discard(self, node):
