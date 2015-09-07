@@ -8,6 +8,8 @@ from pylint.interfaces import ITokenChecker
 from .. import settings
 
 OCA_MSGS = {
+    # C->convention R->refactor W->warning E->error F->fatal
+
     'C%d01' % settings.BASE_FORMAT_ID: (
         'No UTF-8 coding found: Use `# -*- coding: utf-8 -*-` ',
         'no-utf8-coding-comment',
@@ -17,6 +19,11 @@ OCA_MSGS = {
         'Incoherent interpreter comment and executable permission. '
         'Interpreter: [%s] Exec perm: %s',
         'incoherent-interpreter-exec-perm',
+        settings.DESC_DFLT
+    ),
+    'W%d02' % settings.BASE_FORMAT_ID: (
+        'Use of vim comment',
+        'use-vim-comment',
         settings.DESC_DFLT
     ),
 }
@@ -48,6 +55,10 @@ class FormatChecker(BaseTokenChecker):
                 return MAGIC_COMMENT_ENCODING
         return NO_IDENTIFIED
 
+    def is_vim_comment(self, comment):
+        return True if comment.strip('# ').lower().startswith('vim:') \
+            else False
+
     def process_tokens(self, tokens):
         tokens_identified = {}
         for idx, (tok_type, token_content,
@@ -60,6 +71,8 @@ class FormatChecker(BaseTokenChecker):
                 if magic_comment_type != NO_IDENTIFIED:
                     tokens_identified[magic_comment_type] = [
                         token_content, line_num]
+                elif self.is_vim_comment(token_content):
+                    self.add_message('use-vim-comment', line=line_num)
         if not tokens_identified.get(MAGIC_COMMENT_CODING_UTF8):
             self.add_message('no-utf8-coding-comment', line=1)
         access_x = os.access(self.linter.current_file, os.X_OK)
