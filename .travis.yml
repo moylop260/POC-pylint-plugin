@@ -1,0 +1,22 @@
+language: python
+
+python:
+    - "2.7"
+
+install:
+    - pip install . coveralls flake8
+
+script:
+    - flake8 --exclude=__init__.py .
+    - coverage run setup.py test
+
+after_success:
+    coveralls
+
+deploy:
+  provider: pypi
+  user: moylop260
+  password:
+    secure: NFiZTDTrZllyFJiV05CqtKvB73MFK/eVzA25Z/1JgYg3YyDXy8I2I4subbqaJcKQcM5EXPUKL+/TZdjbK5VZoBRBwAFk/TAInxK2zHip1ErfXaOnK0n9kQ+IKKivZ0g+OEnbgwrku21aFJ+CiFqGMEtcPAo78knfcfFCw51EWvrU0BFVx3glKqMQiW6arcphju2iNbcWyhE+zerynaXLEvFHRhR2cbc8VJoPelF8rzWfGy9E3Fqy+ivoe0P6YM/nhqqYB4T49XjiJ5b3MVP4dHypM/CD0TOYNQ39b05QfDAgO2shIZbkyKrPNVWd4fgchtbtcLpTo1NcKH08vmSHFKG53wtCyEV56uy4E8HGNs0SEcP4jXfHMrdUtWnZ0sFOkXnGrH/k8hoRMtN4jsXk+qbCq3SLnVT0bQWvW1kfRosJr8q/lDPOPBBtPlcHtf7jlmpJdTDFsJgtej2BzCN7C2yOeI2sMd8mIlsqHyxnlV8UXgtPD/zIe5IHRz2jtleYcImDkXJ25pxvXApKwI+l99UDbnt3JPk+tlwyz7643aNT5j2buRkVMZF5Q05pG7DImutpGdefKEETCO+EmDFPurwiCeGzXw/X3niU08Xs1PDFizz/rl6en5utN8IHbT1Z9/BmYllkoMhY8nFhQ6gpYEpbULDsmKgLRuojbOtfuQY=
+  on:
+    branch: master
