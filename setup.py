@@ -1,11 +1,8 @@
 
-import os
 import setuptools
-
-from pip.req import parse_requirements
-from pip.download import PipSession
 
 
 setuptools.setup(setup_requires=['pbr'],
                  pbr=True,
+                 test_suite="tests",
                  package_data={'': ['*.yaml']})
