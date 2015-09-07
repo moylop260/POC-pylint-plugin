@@ -1,7 +1,14 @@
 language: python
+sudo: false
+cache: pip
 
 python:
     - "2.7"
+
+addons:
+  apt:
+    packages:
+      - python-lxml  # because pip installation is slow 
 
 install:
     - pip install . coveralls flake8
