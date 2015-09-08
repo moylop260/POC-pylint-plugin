@@ -6,7 +6,7 @@
     'description': 'Should be a README.rst file',
     'version': '1.0',
     'depends': ['base'],
-    'data': ['model_view.xml'],
+    'data': ['model_view.xml', 'model_view2.xml'],
     'test': ['test.yml'],
     'installable': True,
     'name': 'Duplicated value',

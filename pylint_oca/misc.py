@@ -105,8 +105,6 @@ class WrapperModuleChecker(BaseChecker):
         if not fext.startswith('.'):
             fext = '.' + fext
         fnames_filtered = []
-        if not self.manifest_file:
-            return fnames_filtered
 
         for root, dirnames, filenames in os.walk(
                 self.module_path, followlinks=True):

@@ -8,7 +8,7 @@ from pylint.lint import Run
 from pylint_oca import misc
 
 
-EXPECTED_ERRORS = 22
+EXPECTED_ERRORS = 23
 
 
 class MainTest(unittest.TestCase):
@@ -29,7 +29,6 @@ class MainTest(unittest.TestCase):
             '--disable=all',
             '--enable=odoolint,pointless-statement',
         ]
-
 
     def run_pylint(self, paths, extra_params=None):
         for path in paths:

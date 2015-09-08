@@ -87,7 +87,7 @@ class ModuleChecker(misc.WrapperModuleChecker):
             all_xml_ids.extend(self.get_xml_record_ids(xml_file, self.module))
         duplicated_xml_ids = self.get_duplicated_items(all_xml_ids)
         if duplicated_xml_ids:
-            self.msg_args = (duplicated_xml_ids,)
+            self.msg_args = duplicated_xml_ids
             return False
         return True
 

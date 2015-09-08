@@ -11,8 +11,19 @@
                 </form>
             </field>
         </record>
-        <!-- duplicate record id-->
+        <!-- duplicate record id -->
         <record id="view_model_form" model="ir.ui.view">
+            <field name="name">view.model.form</field>
+            <field name="model">test.model</field>
+            <field name="arch" type="xml">
+                <tree string="Test model">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--duplicate id but different module-->
+        <record id="base.view_model_form" model="ir.ui.view">
             <field name="name">view.model.form</field>
             <field name="model">test.model</field>
             <field name="arch" type="xml">
