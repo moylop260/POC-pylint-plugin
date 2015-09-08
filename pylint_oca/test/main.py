@@ -8,7 +8,7 @@ from pylint.lint import Run
 from pylint_oca import misc
 
 
-EXPECTED_ERRORS = 20
+EXPECTED_ERRORS = 22
 
 
 class MainTest(unittest.TestCase):
@@ -30,9 +30,12 @@ class MainTest(unittest.TestCase):
     def run_pylint(self, paths, extra_params=None):
         for path in paths:
             if not os.path.exists(path):
-                raise OSError("Path [{path}] not found.".format(path=path))
+                raise OSError('Path "{path}" not found.'.format(path=path))
         if extra_params is None:
-            extra_params = ['--disable=all', '--enable=odoolint,pointless-statement']
+            extra_params = [
+                '--disable=all',
+                '--enable=odoolint,pointless-statement',
+            ]
         return Run(self.default_options + extra_params + paths, exit=False)
 
     def test_expected_errors(self):
@@ -50,6 +53,13 @@ class MainTest(unittest.TestCase):
             test_missed_msgs, [],
             "Checks without test case: {test_missed_msgs}".format(
                 test_missed_msgs=test_missed_msgs))
+
+        # self-test if path don't exist
+        path_unexist = u'/tmp/____unexist______'
+        with self.assertRaisesRegexp(
+                OSError,
+                r'Path "{path}" not found.$'.format(path=path_unexist)):
+            self.run_pylint([path_unexist])
 
 
 if __name__ == '__main__':

@@ -15,3 +15,5 @@ exclude_lines =
     pragma: no cover
     # Don't complain about null context checking
     if context is None:
+    # Don't complain about self-execute
+    if __name__ == '__main__':
