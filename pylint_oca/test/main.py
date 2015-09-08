@@ -32,7 +32,7 @@ class MainTest(unittest.TestCase):
             if not os.path.exists(path):
                 raise OSError("Path [{path}] not found.".format(path=path))
         if extra_params is None:
-            extra_params = ['--disable=all', '--enable=odoolint']
+            extra_params = ['--disable=all', '--enable=odoolint,pointless-statement']
         return Run(self.default_options + extra_params + paths, exit=False)
 
     def test_expected_errors(self):
