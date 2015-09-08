@@ -9,6 +9,32 @@ from pylint.interfaces import IAstroidChecker
 from . import settings
 
 
+def get_plugin_msgs(pylint_run_res):
+    '''Get all message of this pylint plugin.
+    :param pylint_run_res: Object returned by pylint.run method.
+    :return: List of strings with message name.
+    '''
+    all_plugin_msgs = [
+        key
+        for key in pylint_run_res.linter.msgs_store._messages
+        if pylint_run_res.linter.msgs_store._messages[key].checker.name ==
+        settings.CFG_SECTION
+    ]
+    return all_plugin_msgs
+
+
+def get_sum_fails(pylint_stats):
+    '''Get a sum of all fails.
+    :param pylint_stats: Object returned by pylint.run method.
+    :return: Integer with sum of all errors found.
+    '''
+    return sum([
+        pylint_stats['by_msg'][msg]
+        for msg in pylint_stats['by_msg']])
+
+
+# TODO: Change all methods here
+
 class WrapperModuleChecker(BaseChecker):
 
     __implements__ = IAstroidChecker

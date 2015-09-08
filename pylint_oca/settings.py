@@ -11,10 +11,6 @@ BASE_NOMODULE_ID = 81
 # pylint plugin global msg number for format msgs
 BASE_FORMAT_ID = 82
 
-ALL_BASES = [value
-             for attribute, value in locals().items()
-             if attribute.startswith('BASE_')]
-
 # Manifest files of odoo
 MANIFEST_FILES = ['__odoo__.py', '__openerp__.py', '__terp__.py']
 
