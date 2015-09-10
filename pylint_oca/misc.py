@@ -155,9 +155,8 @@ class WrapperModuleChecker(BaseChecker):
         if model:
             model_filter = "[@model='{model}']".format(model=model)
         with open(xml_file) as fxml:
-            return etree.fromstring(
-                fxml.read().encode('utf-8')).xpath(
-                    "/openerp//record" + model_filter)
+            doc = etree.parse(fxml)
+            return doc.xpath("/openerp//record" + model_filter)
 
     def get_xml_record_ids(self, xml_file, module=None):
         '''Get xml ids from tags `record of a openerp xml file
