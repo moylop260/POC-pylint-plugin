@@ -149,7 +149,8 @@ class NoModuleChecker(BaseChecker):
             manifest_dict = ast.literal_eval(node.as_string())
 
             # Check author required
-            authors = manifest_dict.get('author', '').split(',')
+            authors = map(
+                str.strip, manifest_dict.get('author', '').split(','))
             required_author = self.config.manifest_required_author
             if required_author not in authors:
                 self.add_message('manifest-required-author',
