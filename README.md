@@ -10,4 +10,4 @@ Enable custom checks for OCA modules.
 `# pip install git+https://github.com/moylop260/pylint_oca.git`
 
 ## Usage
- `pylint --load-plugins=pylint_oca ...`
+ `pylint --load-plugins=pylint_oca -e odoolint ...`
