@@ -19,12 +19,12 @@ OCA_MSGS = {
         settings.DESC_DFLT
     ),
     'E%d01' % settings.BASE_OMODULE_ID: (
-        'RST syntax error %s',
+        'RST file %s syntax error %s',
         'rst-syntax-error',
         settings.DESC_DFLT
     ),
     'E%d02' % settings.BASE_OMODULE_ID: (
-        'XML syntax error %s',
+        'XML file %s syntax error %s',
         'xml-syntax-error',
         settings.DESC_DFLT
     ),
@@ -62,7 +62,7 @@ class ModuleChecker(misc.WrapperModuleChecker):
         self.wrapper_visit_module(node)
 
     def _check_rst_syntax_error(self):
-        '''Check if rst file has syntax error
+        '''Check if rst file there is syntax error
         :return: False if exists errors and
                  add list of errors in self.msg_args
         '''
@@ -72,9 +72,8 @@ class ModuleChecker(misc.WrapperModuleChecker):
             errors = self.check_rst_syntax(
                 os.path.join(self.module_path, rst_file))
             if errors:
-                self.msg_args.append(
-                    "{rst_file} {errors}".format(
-                        rst_file=rst_file, errors=errors))
+                self.msg_args.append((
+                    rst_file, errors.strip('\n').replace('\n', '|')))
         if self.msg_args:
             return False
         return True
@@ -87,12 +86,17 @@ class ModuleChecker(misc.WrapperModuleChecker):
         return os.path.isfile(os.path.join(self.module_path, 'README.rst'))
 
     def _check_xml_syntax_error(self):
-        error_xmls = [
-            xml_file
-            for xml_file in self.filter_files_ext('xml', relpath=False)
-            if self.parse_xml(xml_file) is False]
-        if error_xmls:
-            self.msg_args = (error_xmls,)
+        '''Check if xml file there is syntax error
+        :return: False if exists errors and
+                 add list of errors in self.msg_args
+        '''
+        self.msg_args = []
+        for xml_file in self.filter_files_ext('xml', relpath=True):
+            result = self.parse_xml(os.path.join(self.module_path, xml_file))
+            if isinstance(result, basestring):
+                self.msg_args.append((
+                    xml_file, result.strip('\n').replace('\n', '|')))
+        if self.msg_args:
             return False
         return True
 

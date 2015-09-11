@@ -104,12 +104,13 @@ class WrapperModuleChecker(BaseChecker):
         '''
         if not fext.startswith('.'):
             fext = '.' + fext
+        fext = fext.lower()
         fnames_filtered = []
 
         for root, dirnames, filenames in os.walk(
                 self.module_path, followlinks=True):
             for filename in filenames:
-                if os.path.splitext(filename)[1] == fext:
+                if os.path.splitext(filename)[1].lower() == fext:
                     fname_filtered = os.path.join(root, filename)
                     if relpath:
                         fname_filtered = os.path.relpath(
@@ -146,12 +147,12 @@ class WrapperModuleChecker(BaseChecker):
         '''Get xml parsed.
         :param xml_file: Path of file xml
         :return: Doc parsed (lxml.etree object)
-            if there is syntax error return False
+            if there is syntax error return string error message
         '''
         try:
             doc = etree.parse(open(xml_file))
-        except etree.XMLSyntaxError:
-            return False
+        except etree.XMLSyntaxError, xmlsyntax_error_exception:
+            return xmlsyntax_error_exception.message
         return doc
 
     def get_xml_records(self, xml_file, model=None):
@@ -168,7 +169,8 @@ class WrapperModuleChecker(BaseChecker):
         else:
             model_filter = "[@model='{model}']".format(model=model)
         doc = self.parse_xml(xml_file)
-        return doc.xpath("/openerp//record" + model_filter) if doc else []
+        return doc.xpath("/openerp//record" + model_filter) \
+            if not isinstance(doc, basestring) else []
 
     def get_xml_record_ids(self, xml_file, module=None):
         '''Get xml ids from tags `record of a openerp xml file
