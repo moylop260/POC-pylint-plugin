@@ -23,6 +23,11 @@ OCA_MSGS = {
         'rst-syntax-error',
         settings.DESC_DFLT
     ),
+    'E%d02' % settings.BASE_OMODULE_ID: (
+        'XML syntax error %s',
+        'xml-syntax-error',
+        settings.DESC_DFLT
+    ),
     'W%d01' % settings.BASE_OMODULE_ID: (
         'Dangerous filter without explicit `user_id` in xml_id %s',
         'dangerous-filter-wo-user',
@@ -80,6 +85,16 @@ class ModuleChecker(misc.WrapperModuleChecker):
         '''
         self.msg_args = (self.config.readme_template_url,)
         return os.path.isfile(os.path.join(self.module_path, 'README.rst'))
+
+    def _check_xml_syntax_error(self):
+        error_xmls = [
+            xml_file
+            for xml_file in self.filter_files_ext('xml', relpath=False)
+            if self.parse_xml(xml_file) is False]
+        if error_xmls:
+            self.msg_args = (error_xmls,)
+            return False
+        return True
 
     def _check_duplicate_xml_record_id(self):
         all_xml_ids = []
