@@ -10,4 +10,12 @@
     'data': [
         'security/ir.model.access.csv',
     ],
+    'external_dependencies': {
+        'bin': [
+            'sh',
+        ],
+        'python': [
+            'os',
+        ],
+    },
 }

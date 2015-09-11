@@ -57,6 +57,7 @@ import ast
 import os
 import re
 
+import astroid
 from pylint.checkers import BaseChecker, utils
 from pylint.interfaces import IAstroidChecker
 
@@ -145,7 +146,8 @@ class NoModuleChecker(BaseChecker):
                           'manifest-deprecated-key')
     def visit_dict(self, node):
         if os.path.basename(self.linter.current_file) in \
-                settings.MANIFEST_FILES:
+                settings.MANIFEST_FILES \
+                and isinstance(node.parent, astroid.Discard):
             manifest_dict = ast.literal_eval(node.as_string())
 
             # Check author required
