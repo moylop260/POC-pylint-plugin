@@ -142,6 +142,18 @@ class WrapperModuleChecker(BaseChecker):
                 unique_items.add(item)
         return list(duplicated_items)
 
+    def parse_xml(self, xml_file):
+        '''Get xml parsed.
+        :param xml_file: Path of file xml
+        :return: Doc parsed (lxml.etree object)
+            if there is syntax error return False
+        '''
+        try:
+            doc = etree.parse(open(xml_file))
+        except etree.XMLSyntaxError:
+            return False
+        return doc
+
     def get_xml_records(self, xml_file, model=None):
         '''Get tag `record` of a openerp xml file.
         :param xml_file: Path of file xml
@@ -149,14 +161,14 @@ class WrapperModuleChecker(BaseChecker):
                       if model is None then get all.
                       Default None.
         :return: List of lxml `record` nodes
+            If there is syntax error return []
         '''
         if model is None:
             model_filter = ''
-        if model:
+        else:
             model_filter = "[@model='{model}']".format(model=model)
-        with open(xml_file) as fxml:
-            doc = etree.parse(fxml)
-            return doc.xpath("/openerp//record" + model_filter)
+        doc = self.parse_xml(xml_file)
+        return doc.xpath("/openerp//record" + model_filter) if doc else []
 
     def get_xml_record_ids(self, xml_file, module=None):
         '''Get xml ids from tags `record of a openerp xml file
