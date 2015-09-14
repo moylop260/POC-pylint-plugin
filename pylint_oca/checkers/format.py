@@ -11,7 +11,8 @@ OCA_MSGS = {
     # C->convention R->refactor W->warning E->error F->fatal
 
     'C%d01' % settings.BASE_FORMAT_ID: (
-        'No UTF-8 coding found: Use `# -*- coding: utf-8 -*-` ',
+        'No UTF-8 coding comment found: '
+        'Use `# coding: utf-8` or `# -*- coding: utf-8 -*-`',
         'no-utf8-coding-comment',
         settings.DESC_DFLT
     ),
@@ -47,8 +48,9 @@ class FormatChecker(BaseTokenChecker):
         if line_num >= 1 and line_num <= 2:
             if "#!" == comment[:2]:
                 return MAGIC_COMMENT_INTERPRETER
-            elif "# -*- coding: " in comment:
-                if "# -*- coding: utf-8 -*-" in comment:
+            elif "# -*- coding: " in comment or "# coding: " in comment:
+                if "# -*- coding: utf-8 -*-" in comment \
+                   or "# coding: utf-8" in comment:
                     return MAGIC_COMMENT_CODING_UTF8
                 return MAGIC_COMMENT_CODING
             elif "# -*- encoding: " in comment:
