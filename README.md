@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/moylop260/pylint-oca.svg?branch=master)](https://travis-ci.org/moylop260/pylint_oca)
+[![Build Status](https://travis-ci.org/moylop260/pylint-oca.svg?branch=master)](https://travis-ci.org/moylop260/pylint-oca)
 [![Coverage Status](https://coveralls.io/repos/moylop260/pylint_oca/badge.svg?branch=master&service=github)](https://coveralls.io/github/moylop260/pylint_oca?branch=master)
 [![Pypi Package](https://img.shields.io/pypi/v/oca-pylint-plugin.svg)](https://pypi.python.org/pypi/oca-pylint-plugin)
 
