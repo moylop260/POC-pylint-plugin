@@ -2,7 +2,7 @@
 {
     'name': 'Empty module for tests',
     'license': 'AGPL-3',
-    'author': 'author1, Odoo Community Association (OCA), author2',
+    'author': u'Moisés, Odoo Community Association (OCA), author2',
     'version': '1.0',
     'depends': [
         'base',

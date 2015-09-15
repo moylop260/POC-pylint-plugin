@@ -152,7 +152,8 @@ class NoModuleChecker(BaseChecker):
 
             # Check author required
             authors = map(
-                str.strip, manifest_dict.get('author', '').split(','))
+                lambda author: author.strip(),
+                manifest_dict.get('author', '').split(','))
             required_author = self.config.manifest_required_author
             if required_author not in authors:
                 self.add_message('manifest-required-author',
