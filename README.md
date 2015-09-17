@@ -24,4 +24,5 @@ Or
  Example to test just odoo-lint case:
 
  `touch {ADDONS-PATH}/__init__.py`
+ 
  `pylint --load-plugins=pylint_oca -d all -e odoolint {ADDONS-PATH}`
