@@ -11,8 +11,17 @@ Enable custom checks for OCA modules.
 ## Install
 `# pip install git+https://github.com/moylop260/pylint_oca.git`
 
+Or
+
+`# pip install oca-pylint-plugin`
+
+
 ## Usage
+
  `pylint --load-plugins=pylint_oca -e odoolint ...`
+
  
  Example to test just odoo-lint case:
- `pylint --load-plugins=pylint_oca -d all -e odoolint {PATH}`
+
+  touch {ADDONS-PATH}/__init__.py
+ `pylint --load-plugins=pylint_oca -d all -e odoolint {ADDONS-PATH}`
