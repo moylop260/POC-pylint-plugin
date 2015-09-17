@@ -7,3 +7,9 @@ Test module
 This module was written to check the test of rst syntax.
 This is a rst file without syntax error.
 
+Pygments test
+
+.. code-block:: python
+
+    if True:
+        pass
