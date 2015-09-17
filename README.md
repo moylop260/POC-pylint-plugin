@@ -9,11 +9,11 @@
 Enable custom checks for OCA modules.
 
 ## Install
-`# pip install git+https://github.com/moylop260/pylint_oca.git`
+`# pip install --upgrade git+https://github.com/moylop260/pylint_oca.git`
 
 Or
 
-`# pip install oca-pylint-plugin`
+`# pip install --upgrade --pre oca-pylint-plugin`
 
 
 ## Usage
