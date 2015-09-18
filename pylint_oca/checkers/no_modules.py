@@ -82,6 +82,11 @@ OCA_MSGS = {
         'copy-wo-api-one',
         settings.DESC_DFLT
     ),
+    'W%d03' % settings.BASE_NOMODULE_ID: (
+        'Translation method _("string") in fields is not necessary.',
+        'translation-field',
+        settings.DESC_DFLT
+    ),
     'C%d01' % settings.BASE_NOMODULE_ID: (
         'Missing author required "%s" in manifest file',
         'manifest-required-author',
@@ -104,8 +109,6 @@ OCA_MSGS = {
         'class-camelcase',
         settings.DESC_DFLT
     ),
-
-
 }
 
 DFTL_MANIFEST_REQUIRED_KEYS = ['license']
@@ -141,6 +144,18 @@ class NoModuleChecker(BaseChecker):
                     'separated by a comma.'
         }),
     )
+
+    @utils.check_messages('translation-field',)
+    def visit_callfunc(self, node):
+        if node.as_string().lower().startswith('fields.'):
+            for argument in node.args:
+                argument_aux = argument
+                if isinstance(argument, astroid.Keyword):
+                    argument_aux = argument.value
+                if isinstance(argument_aux, astroid.CallFunc) and \
+                   argument_aux.func.name == '_':
+                    self.add_message('translation-field',
+                                     node=argument_aux)
 
     @utils.check_messages('manifest-required-author', 'manifest-required-key',
                           'manifest-deprecated-key')
