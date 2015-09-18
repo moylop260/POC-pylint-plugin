@@ -151,7 +151,7 @@ class WrapperModuleChecker(BaseChecker):
         '''
         try:
             doc = etree.parse(open(xml_file))
-        except etree.XMLSyntaxError, xmlsyntax_error_exception:
+        except etree.XMLSyntaxError as xmlsyntax_error_exception:
             return xmlsyntax_error_exception.message
         return doc
 
