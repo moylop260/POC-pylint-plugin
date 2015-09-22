@@ -153,7 +153,8 @@ class NoModuleChecker(BaseChecker):
                 if isinstance(argument, astroid.Keyword):
                     argument_aux = argument.value
                 if isinstance(argument_aux, astroid.CallFunc) and \
-                   argument_aux.func.name == '_':
+                        isinstance(argument_aux.func, astroid.Name) and \
+                        argument_aux.func.name == '_':
                     self.add_message('translation-field',
                                      node=argument_aux)
 
