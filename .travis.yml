@@ -13,12 +13,12 @@ addons:
   apt:
     packages:
       - python-lxml  # because pip installation is slow 
-      - nodejs
 
 virtualenv:
   system_site_packages: true
 
 install:
+    - which npm
     # Remove packages installed from addons-apt-packages of travis file
     - find -L ${TRAVIS_BUILD_DIR} -name requirements.txt -exec sed -i '/lxml/d'  {} \;
     - find -L ${TRAVIS_BUILD_DIR} -name install.sh -exec sed -i '/node/d'  {} \;
