@@ -133,9 +133,13 @@ class WrapperModuleChecker(BaseChecker):
         :return: Return list of errors.
         '''
         cmd = ['jshint', '--reporter=unix', fname]
-        output = subprocess.Popen(
-            cmd, stderr=subprocess.STDOUT,
-            stdout=subprocess.PIPE).stdout.read()
+        try:
+            output = subprocess.Popen(
+                cmd, stderr=subprocess.STDOUT,
+                stdout=subprocess.PIPE).stdout.read()
+        except OSError as oserr:
+            output_err = ' - ' + cmd[0] + ': ' + oserr.strerror
+            return [output_err]
         output = output.replace(fname, '')
         output_spplited = []
         if output:
