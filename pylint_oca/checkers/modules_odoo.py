@@ -107,6 +107,10 @@ class ModuleChecker(misc.WrapperModuleChecker):
         return True
 
     def _check_duplicate_xml_record_id(self):
+        '''Check duplicate xml record id all xml files of a odoo module.
+        :return: False if exists errors and
+                 add list of errors in self.msg_args
+        '''
         all_xml_ids = []
         for xml_file in self.filter_files_ext('xml', relpath=False):
             all_xml_ids.extend(self.get_xml_record_ids(xml_file, self.module))
@@ -117,6 +121,10 @@ class ModuleChecker(misc.WrapperModuleChecker):
         return True
 
     def _check_dangerous_filter_wo_user(self):
+        '''Check dangeorous filter without a user assigned.
+        :return: False if exists errors and
+                 add list of errors in self.msg_args
+        '''
         xml_files = self.filter_files_ext('xml')
         for xml_file in xml_files:
             ir_filter_records = self.get_xml_records(
@@ -133,7 +141,7 @@ class ModuleChecker(misc.WrapperModuleChecker):
         return True
 
     def _check_javascript_lint(self):
-        '''Check javascript javascript lint
+        '''Check javascript lint
         :return: False if exists errors and
                  add list of errors in self.msg_args
         '''
