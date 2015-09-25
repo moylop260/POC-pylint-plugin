@@ -27,6 +27,7 @@ install:
     - ${TRAVIS_BUILD_DIR}/install.sh
 
     # Install testing dependencies
+    - pip install --upgrade pyopenssl ndg-httpsclient pyasn1
     - pip install coveralls flake8
 
 script:
