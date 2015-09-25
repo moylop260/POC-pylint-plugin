@@ -1,10 +1,11 @@
 
 import os
-import subprocess
 
 from lxml import etree
 from pylint.checkers import BaseChecker
 from pylint.interfaces import IAstroidChecker
+
+from restructuredtext_lint import lint_file as rst_lint
 
 from . import settings
 
@@ -121,13 +122,9 @@ class WrapperModuleChecker(BaseChecker):
     def check_rst_syntax(self, fname):
         '''Check syntax in rst files.
         :param fname: String with file name path to check
-        :return: Return errors. Empty string if not errors.
+        :return: Return list of errors.
         '''
-        cmd = ['rst2html.py', fname, '/dev/null', '-r', '1']
-        errors = subprocess.Popen(
-            cmd, stderr=subprocess.STDOUT,
-            stdout=subprocess.PIPE).stdout.read()
-        return errors
+        return rst_lint(fname)
 
     def get_duplicated_items(self, items):
         '''Get duplicated items
