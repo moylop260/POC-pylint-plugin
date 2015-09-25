@@ -11,9 +11,7 @@ omit =
 
 # Regexes for lines to exclude from consideration
 exclude_lines =
-    # Have to re-enable the standard pragma
-    pragma: no cover
-    # Don't complain about null context checking
-    if context is None:
     # Don't complain about self-execute
     if __name__ == '__main__':
+    # Don't complain about uninstalled packages
+    except OSError as oserr:
