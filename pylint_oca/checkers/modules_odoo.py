@@ -19,12 +19,12 @@ OCA_MSGS = {
         settings.DESC_DFLT
     ),
     'E%d01' % settings.BASE_OMODULE_ID: (
-        'RST file %s syntax error %s',
+        '%s:%s %s',
         'rst-syntax-error',
         settings.DESC_DFLT
     ),
     'E%d02' % settings.BASE_OMODULE_ID: (
-        'XML file %s syntax error %s',
+        '%s error: %s',
         'xml-syntax-error',
         settings.DESC_DFLT
     ),
@@ -71,9 +71,10 @@ class ModuleChecker(misc.WrapperModuleChecker):
         for rst_file in rst_files:
             errors = self.check_rst_syntax(
                 os.path.join(self.module_path, rst_file))
-            if errors:
+            for error in errors:
                 self.msg_args.append((
-                    rst_file, errors.strip('\n').replace('\n', '|')))
+                    rst_file, error.line,
+                    error.full_message.strip('\n').replace('\n', '|')))
         if self.msg_args:
             return False
         return True
