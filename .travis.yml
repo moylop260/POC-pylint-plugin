@@ -14,6 +14,9 @@ addons:
     packages:
       - python-lxml  # because pip installation is slow 
 
+virtualenv:
+  system_site_packages: true
+
 install:
     - find -L . -name requirements.txt -exec sed -i '/lxml/d'  {} \;
     - pip install --ignore-installed . coveralls flake8 --download-cache $HOME/.cache/pip
