@@ -19,7 +19,7 @@ virtualenv:
 
 install:
     - find -L . -name requirements.txt -exec sed -i '/lxml/d'  {} \;
-    - pip install --ignore-installed . coveralls flake8 --download-cache $HOME/.cache/pip
+    - pip install --ignore-installed . coveralls flake8
 
 script:
     - flake8 --exclude=__init__.py .
