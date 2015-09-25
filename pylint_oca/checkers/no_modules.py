@@ -114,11 +114,21 @@ OCA_MSGS = {
         'class-camelcase',
         settings.DESC_DFLT
     ),
+    'C%d05' % settings.BASE_NOMODULE_ID: (
+        'License "%s" not allowed in manifest file.',
+        'license-allowed',
+        settings.DESC_DFLT
+    ),
 }
 
 DFTL_MANIFEST_REQUIRED_KEYS = ['license']
 DFTL_MANIFEST_REQUIRED_AUTHOR = 'Odoo Community Association (OCA)'
 DFTL_MANIFEST_DEPRECATED_KEYS = ['description']
+DFTL_LICENSE_ALLOWED = [
+    'AGPL-3', 'GPL-2', 'GPL-2 or any later version',
+    'GPL-3', 'GPL-3 or any later version', 'LGPL-3',
+    'Other OSI approved licence', 'Other proprietary',
+]
 
 
 class NoModuleChecker(BaseChecker):
@@ -146,6 +156,13 @@ class NoModuleChecker(BaseChecker):
             'metavar': '<comma separated values>',
             'default': DFTL_MANIFEST_DEPRECATED_KEYS,
             'help': 'List of keys deprecated in manifest file, ' +
+                    'separated by a comma.'
+        }),
+        ('license_allowed', {
+            'type': 'csv',
+            'metavar': '<comma separated values>',
+            'default': DFTL_LICENSE_ALLOWED,
+            'help': 'List of license allowed in manifest file, ' +
                     'separated by a comma.'
         }),
     )
@@ -193,6 +210,12 @@ class NoModuleChecker(BaseChecker):
                 if deprecated_key in manifest_dict:
                     self.add_message('manifest-deprecated-key',
                                      node=node, args=(deprecated_key,))
+
+            # Check license allowed
+            license = manifest_dict.get('license', None)
+            if license and license not in self.config.license_allowed:
+                self.add_message('license-allowed',
+                                 node=node, args=(license,))
 
     @utils.check_messages('api-one-multi-together',
                           'copy-wo-api-one', 'api-one-deprecated')
