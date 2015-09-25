@@ -6,6 +6,9 @@ from openerp import fields, models, _
 class TestModel(models.Model):
     _name = 'test.model'
 
+    _fields = {}  # deprecated fields
+    _defaults = {}  # deprecated defaults
+
     name = fields.Char(
         _(u"Näme"),  # Don't need translate
         help=u"My hëlp",

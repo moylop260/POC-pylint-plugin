@@ -92,6 +92,11 @@ OCA_MSGS = {
         'api-one-deprecated',
         settings.DESC_DFLT
     ),
+    'W%d05' % settings.BASE_NOMODULE_ID: (
+        'attribute "%s" deprecated',
+        'attribute-deprecated',
+        settings.DESC_DFLT
+    ),
     'C%d01' % settings.BASE_NOMODULE_ID: (
         'Missing author required "%s" in manifest file',
         'manifest-required-author',
@@ -129,6 +134,9 @@ DFTL_LICENSE_ALLOWED = [
     'GPL-3', 'GPL-3 or any later version', 'LGPL-3',
     'Other OSI approved licence', 'Other proprietary',
 ]
+DFTL_ATTRIBUTE_DEPRECATED = [
+    '_fields', '_defaults',
+]
 
 
 class NoModuleChecker(BaseChecker):
@@ -163,6 +171,13 @@ class NoModuleChecker(BaseChecker):
             'metavar': '<comma separated values>',
             'default': DFTL_LICENSE_ALLOWED,
             'help': 'List of license allowed in manifest file, ' +
+                    'separated by a comma.'
+        }),
+        ('attribute_deprecated', {
+            'type': 'csv',
+            'metavar': '<comma separated values>',
+            'default': DFTL_ATTRIBUTE_DEPRECATED,
+            'help': 'List of attributes deprecated, ' +
                     'separated by a comma.'
         }),
     )
@@ -258,6 +273,14 @@ class NoModuleChecker(BaseChecker):
         if camelized != node.name:
             self.add_message('class-camelcase', node=node,
                              args=(camelized, node.name))
+
+    @utils.check_messages('attribute-deprecated')
+    def visit_assign(self, node):
+        node_left = node.targets[0]
+        if isinstance(node_left, astroid.node_classes.AssName):
+            if node_left.name in self.config.attribute_deprecated:
+                self.add_message('attribute-deprecated',
+                                 node=node_left, args=(node_left.name,))
 
     def camelize(self, string):
         return re.sub(r"(?:^|_)(.)", lambda m: m.group(1).upper(), string)
