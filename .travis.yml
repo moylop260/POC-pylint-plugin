@@ -14,7 +14,7 @@ addons:
       - python-lxml  # because pip installation is slow 
 
 install:
-    - pip install . coveralls flake8
+    - pip install --ignore-installed . coveralls flake8 --download-cache $HOME/.cache/pip
 
 script:
     - flake8 --exclude=__init__.py .
