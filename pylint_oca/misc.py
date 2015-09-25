@@ -1,5 +1,6 @@
 
 import os
+import subprocess
 
 from lxml import etree
 from pylint.checkers import BaseChecker
@@ -125,6 +126,22 @@ class WrapperModuleChecker(BaseChecker):
         :return: Return list of errors.
         '''
         return rst_lint(fname)
+
+    def check_js_lint(self, fname):
+        '''Check javascript lint in fname.
+        :param fname: String with full path of file to check
+        :return: Return list of errors.
+        '''
+        cmd = ['jshint', '--reporter=unix', fname]
+        output = subprocess.Popen(
+            cmd, stderr=subprocess.STDOUT,
+            stdout=subprocess.PIPE).stdout.read()
+        output = output.replace(fname, '')
+        output_spplited = []
+        if output:
+            output_spplited.extend(
+                output.strip('\n').split('\n')[:-2])
+        return output_spplited
 
     def get_duplicated_items(self, items):
         '''Get duplicated items

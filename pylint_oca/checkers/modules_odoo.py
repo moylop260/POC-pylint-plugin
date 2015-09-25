@@ -38,6 +38,11 @@ OCA_MSGS = {
         'duplicate-xml-record-id',
         settings.DESC_DFLT
     ),
+    'W%d03' % settings.BASE_OMODULE_ID: (
+        '%s',
+        'javascript-lint',
+        settings.DESC_DFLT
+    ),
 }
 
 
@@ -125,4 +130,20 @@ class ModuleChecker(misc.WrapperModuleChecker):
                     self.msg_args = (
                         xml_file + ':' + ir_filter_record.get('id'),)
                     return False
+        return True
+
+    def _check_javascript_lint(self):
+        '''Check javascript javascript lint
+        :return: False if exists errors and
+                 add list of errors in self.msg_args
+        '''
+        self.msg_args = []
+        for js_file in self.filter_files_ext('js', relpath=True):
+            errors = self.check_js_lint(
+                os.path.join(self.module_path, js_file))
+            for error in errors:
+                self.msg_args.append((
+                    js_file + error))
+        if self.msg_args:
+            return False
         return True
