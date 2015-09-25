@@ -8,7 +8,7 @@ from pylint.lint import Run
 from pylint_oca import misc
 
 
-EXPECTED_ERRORS = 30
+EXPECTED_ERRORS = 34
 
 
 class MainTest(unittest.TestCase):

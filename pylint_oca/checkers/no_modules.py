@@ -87,6 +87,11 @@ OCA_MSGS = {
         'translation-field',
         settings.DESC_DFLT
     ),
+    'W%d04' % settings.BASE_NOMODULE_ID: (
+        'api.one deprecated',
+        'api-one-deprecated',
+        settings.DESC_DFLT
+    ),
     'C%d01' % settings.BASE_NOMODULE_ID: (
         'Missing author required "%s" in manifest file',
         'manifest-required-author',
@@ -190,10 +195,11 @@ class NoModuleChecker(BaseChecker):
                                      node=node, args=(deprecated_key,))
 
     @utils.check_messages('api-one-multi-together',
-                          'copy-wo-api-one')
+                          'copy-wo-api-one', 'api-one-deprecated')
     def visit_function(self, node):
         '''Check that `api.one` and `api.multi` decorators not exists together
         Check that method `copy` exists `api.one` decorator
+        Check deprecated `api.one`.
         '''
         decor_names = self.get_decorators_names(node.decorators)
         decor_lastnames = [
@@ -208,6 +214,11 @@ class NoModuleChecker(BaseChecker):
         if self.linter.is_message_enabled('copy-wo-api-one'):
             if 'copy' == node.name and 'one' not in decor_lastnames:
                 self.add_message('copy-wo-api-one', node=node)
+
+        if self.linter.is_message_enabled('api-one-deprecated'):
+            if 'one' in decor_lastnames:
+                self.add_message('api-one-deprecated',
+                                 node=node)
 
     @utils.check_messages('openerp-exception-warning')
     def visit_from(self, node):
