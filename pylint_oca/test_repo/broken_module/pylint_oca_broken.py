@@ -25,26 +25,54 @@ class UseUnusedImport(object):
 class ApiOne(object):
     @api.one
     def copy(self):
-        # ToDo: Add check of super
+        # Missing super()
+        pass
+
+    def create(self):
+        # Missing super()
+        pass
+
+    def write(self):
+        # Missing super()
+        pass
+
+    def unlink(self):
+        # Missing super()
+        pass
+
+    def read(self):
+        # Missing super()
+        pass
+
+    def setUp(self):
+        # Missing super()
+        pass
+
+    def tearDown(self):
+        # Missing super()
+        pass
+
+    def default_get(self):
+        # Missing super()
         pass
 
 
 class One(object):
     @one
     def copy(self):
-        pass
+        return super(One, self).copy()
 
 
 class OpenerpApiOne(object):
     @openerp.api.one
     def copy(self):
-        pass
+        return super(OpenerpApiOne, self).copy()
 
 
 class WOApiOne(object):
     # copy without api.one decorator
     def copy(self):
-        pass
+        return super(WOApiOne, self).copy()
 
 
 class ApiOneMultiTogether(object):
@@ -52,16 +80,16 @@ class ApiOneMultiTogether(object):
     @api.multi
     @api.one
     def copy(self):
-        pass
+        return super(ApiOneMultiTogether, self).copy()
 
     @multi
     @one
     def copy2(self):
-        pass
+        return super(ApiOneMultiTogether, self).copy2()
 
     @openerp.api.multi
     @openerp.api.one
     def copy3(self):
-        pass
+        return super(ApiOneMultiTogether, self).copy3()
 
 # vim:comment vim

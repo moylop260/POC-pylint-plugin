@@ -8,7 +8,7 @@ from pylint.lint import Run
 from pylint_oca import misc
 
 
-EXPECTED_ERRORS = 37
+EXPECTED_ERRORS = 45
 
 
 class MainTest(unittest.TestCase):
@@ -69,9 +69,9 @@ class MainTest(unittest.TestCase):
         pylint_res = self.run_pylint(self.paths_modules)
         sum_fails_found = misc.get_sum_fails(pylint_res.linter.stats)
         self.assertEqual(
-            sum_fails_found, EXPECTED_ERRORS-1,
+            sum_fails_found, EXPECTED_ERRORS - 1,
             "Errors found {fnd} different to expected {exp}.".format(
-                fnd=sum_fails_found, exp=EXPECTED_ERRORS-1))
+                fnd=sum_fails_found, exp=EXPECTED_ERRORS - 1))
 
 
 if __name__ == '__main__':

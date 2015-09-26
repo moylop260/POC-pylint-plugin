@@ -78,7 +78,7 @@ OCA_MSGS = {
         settings.DESC_DFLT
     ),
     'W%d02' % settings.BASE_NOMODULE_ID: (
-        'Missing api.one in copy function.',
+        'Missing api.one or api.multi in copy function.',
         'copy-wo-api-one',
         settings.DESC_DFLT
     ),
@@ -95,6 +95,11 @@ OCA_MSGS = {
     'W%d05' % settings.BASE_NOMODULE_ID: (
         'attribute "%s" deprecated',
         'attribute-deprecated',
+        settings.DESC_DFLT
+    ),
+    'W%d06' % settings.BASE_NOMODULE_ID: (
+        'Missing `super` call in "%s" method.',
+        'method-required-super',
         settings.DESC_DFLT
     ),
     'C%d01' % settings.BASE_NOMODULE_ID: (
@@ -137,6 +142,10 @@ DFTL_LICENSE_ALLOWED = [
 DFTL_ATTRIBUTE_DEPRECATED = [
     '_fields', '_defaults',
 ]
+DFTL_METHOD_REQUIRED_SUPER = [
+    'create', 'write', 'read', 'unlink', 'copy',
+    'setUp', 'tearDown', 'default_get',
+]
 
 
 class NoModuleChecker(BaseChecker):
@@ -178,6 +187,13 @@ class NoModuleChecker(BaseChecker):
             'metavar': '<comma separated values>',
             'default': DFTL_ATTRIBUTE_DEPRECATED,
             'help': 'List of attributes deprecated, ' +
+                    'separated by a comma.'
+        }),
+        ('method_required_super', {
+            'type': 'csv',
+            'metavar': '<comma separated values>',
+            'default': DFTL_METHOD_REQUIRED_SUPER,
+            'help': 'List of methods where call to `super` is required.' +
                     'separated by a comma.'
         }),
     )
@@ -233,12 +249,16 @@ class NoModuleChecker(BaseChecker):
                                  node=node, args=(license,))
 
     @utils.check_messages('api-one-multi-together',
-                          'copy-wo-api-one', 'api-one-deprecated')
+                          'copy-wo-api-one', 'api-one-deprecated',
+                          'method-required-super')
     def visit_function(self, node):
         '''Check that `api.one` and `api.multi` decorators not exists together
         Check that method `copy` exists `api.one` decorator
         Check deprecated `api.one`.
         '''
+        if not node.is_method():
+            return
+
         decor_names = self.get_decorators_names(node.decorators)
         decor_lastnames = [
             decor.split('.')[-1]
@@ -250,13 +270,23 @@ class NoModuleChecker(BaseChecker):
                                  node=node)
 
         if self.linter.is_message_enabled('copy-wo-api-one'):
-            if 'copy' == node.name and 'one' not in decor_lastnames:
+            if 'copy' == node.name and ('one' not in decor_lastnames and
+                                        'multi' not in decor_lastnames):
                 self.add_message('copy-wo-api-one', node=node)
 
         if self.linter.is_message_enabled('api-one-deprecated'):
             if 'one' in decor_lastnames:
                 self.add_message('api-one-deprecated',
                                  node=node)
+
+        if node.name in self.config.method_required_super:
+            calls = [
+                call_func.func.name
+                for call_func in node.nodes_of_class((astroid.CallFunc,))
+                if isinstance(call_func.func, astroid.Name)]
+            if 'super' not in calls:
+                self.add_message('method-required-super',
+                                 node=node, args=(node.name))
 
     @utils.check_messages('openerp-exception-warning')
     def visit_from(self, node):

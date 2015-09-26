@@ -3,6 +3,10 @@
 from openerp import fields, models, _
 
 
+def function_no_method():
+    pass
+
+
 class TestModel(models.Model):
     _name = 'test.model'
 
