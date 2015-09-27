@@ -11,3 +11,22 @@ def register(linter):
 
     # register any checking fiddlers
     apply_augmentations(linter)
+
+
+def get_all_messages():
+    """Get all messages of this plugin"""
+    all_msgs = {}
+    all_msgs.update(checkers.modules_odoo.OCA_MSGS)
+    all_msgs.update(checkers.no_modules.OCA_MSGS)
+    all_msgs.update(checkers.format.OCA_MSGS)
+    return all_msgs
+
+
+def messages2md():
+    all_msgs = get_all_messages()
+    md_msgs = 'Code | Description | short name\n--- | --- | ---'
+    for msg_code, (title, name_key, description) in \
+                            sorted(all_msgs.iteritems()):
+            md_msgs += "\n{0} | {1} | {2}".format(msg_code, title, name_key)
+    md_msgs += '\n'
+    return md_msgs
