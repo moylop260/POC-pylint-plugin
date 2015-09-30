@@ -17,8 +17,8 @@ OCA_MSGS = {
         settings.DESC_DFLT
     ),
     'W%d01' % settings.BASE_FORMAT_ID: (
-        'Incoherent interpreter comment and executable permission. '
-        'Interpreter: [%s] Exec perm: %s',
+        'Incoherent interpreter comment [%s] and executable permission [%s]. '
+        'Remove interpreter comment or executed `chmod -x myfile.py`',
         'incoherent-interpreter-exec-perm',
         settings.DESC_DFLT
     ),
